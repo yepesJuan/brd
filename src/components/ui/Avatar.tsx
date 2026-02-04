@@ -1,0 +1,40 @@
+'use client';
+
+interface AvatarProps {
+  src?: string | null;
+  name: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const sizeStyles = {
+  sm: 'h-6 w-6 text-xs',
+  md: 'h-8 w-8 text-sm',
+  lg: 'h-10 w-10 text-base',
+};
+
+export function Avatar({ src, name, size = 'md' }: AvatarProps) {
+  const initials = name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
+  if (src) {
+    return (
+      <img
+        src={src}
+        alt={name}
+        className={`rounded-full object-cover ${sizeStyles[size]}`}
+      />
+    );
+  }
+
+  return (
+    <div
+      className={`flex items-center justify-center rounded-full bg-gray-200 font-medium text-gray-600 ${sizeStyles[size]}`}
+    >
+      {initials}
+    </div>
+  );
+}
