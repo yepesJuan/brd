@@ -18,7 +18,7 @@ export default async function RequirementsPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Requirements</h1>
           <p className="text-gray-600 mt-1">
@@ -26,7 +26,7 @@ export default async function RequirementsPage() {
           </p>
         </div>
         {isBusinessUser && (
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Link href="/requirements/generate">
               <Button variant="outline">
                 <svg className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

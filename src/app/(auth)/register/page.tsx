@@ -76,14 +76,19 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md space-y-8">
+    <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="w-full max-w-md space-y-8 bg-white rounded-2xl shadow-xl p-8 sm:p-10">
         <div className="text-center">
+          <div className="mx-auto h-14 w-14 rounded-full bg-green-100 flex items-center justify-center mb-4">
+            <svg className="h-7 w-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
           <h1 className="text-3xl font-bold text-gray-900">Create Account</h1>
           <p className="mt-2 text-gray-600">Join Greenlight</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             <Input
               id="name"
@@ -129,7 +134,7 @@ export default function RegisterPage() {
                     key={roleKey}
                     className={`flex items-start gap-3 rounded-lg border p-4 cursor-pointer transition-colors ${
                       role === roleKey
-                        ? 'border-blue-500 bg-blue-50'
+                        ? 'border-green-500 bg-green-50'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -166,7 +171,7 @@ export default function RegisterPage() {
 
         <p className="text-center text-sm text-gray-600">
           Already have an account?{' '}
-          <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500">
+          <Link href="/login" className="font-medium text-green-600 hover:text-green-500">
             Sign in
           </Link>
         </p>

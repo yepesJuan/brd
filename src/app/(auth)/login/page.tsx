@@ -41,14 +41,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
-      <div className="w-full max-w-md space-y-8">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="w-full max-w-md space-y-8 bg-white rounded-2xl shadow-xl p-8 sm:p-10">
         <div className="text-center">
+          <div className="mx-auto h-14 w-14 rounded-full bg-green-100 flex items-center justify-center mb-4">
+            <svg className="h-7 w-7 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
           <h1 className="text-3xl font-bold text-gray-900">Greenlight</h1>
           <p className="mt-2 text-gray-600">Sign in to your account</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
             <Input
               id="email"
@@ -79,7 +84,7 @@ export default function LoginPage() {
 
         <p className="text-center text-sm text-gray-600">
           Don&apos;t have an account?{' '}
-          <Link href="/register" className="font-medium text-blue-600 hover:text-blue-500">
+          <Link href="/register" className="font-medium text-green-600 hover:text-green-500">
             Register
           </Link>
         </p>

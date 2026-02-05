@@ -59,7 +59,7 @@ export default async function RequirementDetailPage({ params }: PageProps) {
         Back to Requirements
       </Link>
 
-      <div className="grid gap-6 lg:grid-cols-5">
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
         {/* Main content */}
         <div className="lg:col-span-3 space-y-6">
           {/* Header */}
