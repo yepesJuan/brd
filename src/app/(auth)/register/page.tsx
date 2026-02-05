@@ -80,7 +80,7 @@ export default function RegisterPage() {
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900">Create Account</h1>
-          <p className="mt-2 text-gray-600">Join the BRD Sign-Off system</p>
+          <p className="mt-2 text-gray-600">Join Greenlight</p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">

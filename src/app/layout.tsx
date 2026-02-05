@@ -4,8 +4,8 @@ import { TRPCProvider } from '@/components/providers/TRPCProvider';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'BRD Sign-Off',
-  description: 'Business Requirements Document Sign-Off Application',
+  title: 'Greenlight',
+  description: 'Requirements approval and sign-off platform',
 };
 
 export default function RootLayout({

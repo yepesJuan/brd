@@ -4,16 +4,16 @@ import { UploadForm } from '@/components/requirements/UploadForm';
 
 export default async function NewRequirementPage() {
   const supabase = await createServerSupabaseClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { user: authUser } } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!authUser) {
     redirect('/login');
   }
 
   const { data: user } = await supabase
     .from('users')
     .select('role')
-    .eq('id', session.user.id)
+    .eq('id', authUser.id)
     .single();
 
   // Only BUSINESS users can upload requirements

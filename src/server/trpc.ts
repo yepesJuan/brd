@@ -5,21 +5,21 @@ import type { User } from '@/types';
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   const supabase = await createServerSupabaseClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { user: authUser } } = await supabase.auth.getUser();
 
   let user: User | null = null;
-  if (session?.user) {
+  if (authUser) {
     const { data } = await supabase
       .from('users')
       .select('*')
-      .eq('id', session.user.id)
+      .eq('id', authUser.id)
       .single();
     user = data;
   }
 
   return {
     supabase,
-    session,
+    authUser,
     user,
   };
 };
@@ -35,13 +35,13 @@ export const publicProcedure = t.procedure;
 
 // Protected procedure - requires authentication
 export const protectedProcedure = t.procedure.use(({ ctx, next }) => {
-  if (!ctx.session || !ctx.user) {
+  if (!ctx.authUser || !ctx.user) {
     throw new TRPCError({ code: 'UNAUTHORIZED' });
   }
   return next({
     ctx: {
       ...ctx,
-      session: ctx.session,
+      authUser: ctx.authUser,
       user: ctx.user,
     },
   });

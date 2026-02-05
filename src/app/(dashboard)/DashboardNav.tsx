@@ -29,7 +29,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
           {/* Logo & Nav */}
           <div className="flex items-center gap-8">
             <Link href="/requirements" className="text-xl font-bold text-gray-900">
-              BRD Sign-Off
+              Greenlight
             </Link>
             <div className="hidden sm:flex items-center gap-4">
               <Link

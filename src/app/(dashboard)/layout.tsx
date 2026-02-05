@@ -8,9 +8,9 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const supabase = await createServerSupabaseClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { user: authUser } } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!authUser) {
     redirect('/login');
   }
 
@@ -18,7 +18,7 @@ export default async function DashboardLayout({
   const { data: user } = await supabase
     .from('users')
     .select('*')
-    .eq('id', session.user.id)
+    .eq('id', authUser.id)
     .single();
 
   if (!user) {

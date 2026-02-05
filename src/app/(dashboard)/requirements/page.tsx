@@ -5,16 +5,16 @@ import { Button } from '@/components/ui/Button';
 
 export default async function RequirementsPage() {
   const supabase = await createServerSupabaseClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { user: authUser } } = await supabase.auth.getUser();
 
   const { data: user } = await supabase
     .from('users')
     .select('role')
-    .eq('id', session?.user.id)
+    .eq('id', authUser?.id)
     .single();
 
   const isBusinessUser = user?.role === 'BUSINESS';
-  const currentUserId = session?.user.id;
+  const currentUserId = authUser?.id;
 
   return (
     <div>

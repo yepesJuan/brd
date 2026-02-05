@@ -15,9 +15,9 @@ interface PageProps {
 export default async function RequirementDetailPage({ params }: PageProps) {
   const { id } = await params;
   const supabase = await createServerSupabaseClient();
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { user: authUser } } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!authUser) {
     redirect('/login');
   }
 
@@ -25,7 +25,7 @@ export default async function RequirementDetailPage({ params }: PageProps) {
   const { data: currentUser } = await supabase
     .from('users')
     .select('*')
-    .eq('id', session.user.id)
+    .eq('id', authUser.id)
     .single();
 
   if (!currentUser) {
