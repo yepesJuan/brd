@@ -14,6 +14,7 @@ export default async function RequirementsPage() {
     .single();
 
   const isBusinessUser = user?.role === 'BUSINESS';
+  const currentUserId = session?.user.id;
 
   return (
     <div>
@@ -25,13 +26,23 @@ export default async function RequirementsPage() {
           </p>
         </div>
         {isBusinessUser && (
-          <Link href="/requirements/new">
-            <Button>Upload New Requirement</Button>
-          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/requirements/generate">
+              <Button variant="outline">
+                <svg className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Generate with AI
+              </Button>
+            </Link>
+            <Link href="/requirements/new">
+              <Button>Upload Document</Button>
+            </Link>
+          </div>
         )}
       </div>
 
-      <RequirementList />
+      <RequirementList currentUserId={currentUserId} />
     </div>
   );
 }

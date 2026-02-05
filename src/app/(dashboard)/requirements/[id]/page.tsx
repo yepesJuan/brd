@@ -47,7 +47,7 @@ export default async function RequirementDetailPage({ params }: PageProps) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-6xl mx-auto">
       {/* Back link */}
       <Link
         href="/requirements"
@@ -59,9 +59,9 @@ export default async function RequirementDetailPage({ params }: PageProps) {
         Back to Requirements
       </Link>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-5">
         {/* Main content */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-3 space-y-6">
           {/* Header */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <div className="flex items-start justify-between gap-4 mb-4">
@@ -138,7 +138,7 @@ export default async function RequirementDetailPage({ params }: PageProps) {
         </div>
 
         {/* Sign-off panel */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-2">
           <SignOffPanel
             requirementId={requirement.id}
             status={requirement.status as Status}

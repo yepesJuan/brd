@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { trpc } from '@/lib/trpc';
+import { useRequirements } from '@/hooks/useRequirements';
 import { RequirementCard } from './RequirementCard';
 import type { Status } from '@/types';
 
@@ -12,9 +12,13 @@ const STATUS_FILTERS: Array<{ value: Status | 'ALL'; label: string }> = [
   { value: 'APPROVED', label: 'Approved' },
 ];
 
-export function RequirementList() {
+interface RequirementListProps {
+  currentUserId?: string;
+}
+
+export function RequirementList({ currentUserId }: RequirementListProps) {
   const [statusFilter, setStatusFilter] = useState<Status | 'ALL'>('ALL');
-  const { data: requirements, isLoading, error } = trpc.requirements.getAll.useQuery();
+  const { requirements, isLoading, error } = useRequirements({ currentUserId });
 
   if (isLoading) {
     return (
