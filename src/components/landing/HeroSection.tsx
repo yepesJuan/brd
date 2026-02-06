@@ -1,6 +1,10 @@
 import Link from 'next/link';
 
-export function HeroSection() {
+interface HeroSectionProps {
+  isLoggedIn?: boolean;
+}
+
+export function HeroSection({ isLoggedIn = false }: HeroSectionProps) {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-green-500 via-emerald-500 to-teal-600">
       {/* Background pattern */}
@@ -15,7 +19,7 @@ export function HeroSection() {
         </svg>
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8 lg:py-40">
+      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <div className="mx-auto max-w-3xl text-center">
           {/* Logo mark */}
           <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
@@ -51,32 +55,56 @@ export function HeroSection() {
           </p>
 
           {/* CTAs */}
-          <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Link
-              href="/register"
-              className="inline-flex w-full items-center justify-center rounded-lg bg-white px-8 py-4 text-lg font-semibold text-green-600 shadow-lg transition-all hover:bg-green-50 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-white/50 sm:w-auto"
-            >
-              Get Started
-              <svg
-                className="ml-2 h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            {isLoggedIn ? (
+              <Link
+                href="/requirements"
+                className="inline-flex w-full items-center justify-center rounded-lg bg-white px-8 py-4 text-lg font-semibold text-green-600 shadow-lg transition-all hover:bg-green-50 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-white/50 sm:w-auto"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
-            </Link>
-            <Link
-              href="/login"
-              className="inline-flex w-full items-center justify-center rounded-lg border-2 border-white/30 bg-white/10 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/20 focus:outline-none focus:ring-4 focus:ring-white/50 sm:w-auto"
-            >
-              Sign In
-            </Link>
+                Go to Dashboard
+                <svg
+                  className="ml-2 h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/register"
+                  className="inline-flex w-full items-center justify-center rounded-lg bg-white px-8 py-4 text-lg font-semibold text-green-600 shadow-lg transition-all hover:bg-green-50 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-white/50 sm:w-auto"
+                >
+                  Get Started
+                  <svg
+                    className="ml-2 h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                  </svg>
+                </Link>
+                <Link
+                  href="/login"
+                  className="inline-flex w-full items-center justify-center rounded-lg border-2 border-white/30 bg-white/10 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition-all hover:border-white/50 hover:bg-white/20 focus:outline-none focus:ring-4 focus:ring-white/50 sm:w-auto"
+                >
+                  Sign In
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

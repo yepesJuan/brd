@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest, NextResponse } from "next/server";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -274,15 +275,57 @@ interface Message {
   content: string;
 }
 
+interface ContextDocument {
+  fileName: string;
+  content: string;
+}
+
 interface RequestBody {
   messages: Message[];
   isInitial?: boolean;
+  contextDocument?: ContextDocument;
+}
+
+function buildSystemPrompt(contextDocument?: ContextDocument): string {
+  if (!contextDocument) {
+    return SYSTEM_PROMPT;
+  }
+
+  const contextSection = `
+## REFERENCE DOCUMENT
+
+The user has provided "${contextDocument.fileName}" as a reference document to help generate this BRD. Use this context to:
+- Pre-fill answers where information is available
+- Reference specific sections, metrics, or requirements mentioned
+- Extract project details, stakeholders, and technical information
+- Suggest clarifications based on gaps in the document
+
+<reference_document>
+${contextDocument.content}
+</reference_document>
+
+---
+
+`;
+
+  return contextSection + SYSTEM_PROMPT;
 }
 
 export async function POST(request: NextRequest) {
   try {
+    // Verify authentication
+    const supabase = await createServerSupabaseClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json(
+        { error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
     const body: RequestBody = await request.json();
-    const { messages, isInitial } = body;
+    const { messages, isInitial, contextDocument } = body;
 
     // For initial request, we want Claude to start the conversation
     const apiMessages: Anthropic.MessageParam[] = isInitial
@@ -292,13 +335,21 @@ export async function POST(request: NextRequest) {
           content: msg.content,
         }));
 
+    // Build system prompt with optional context document
+    const systemPrompt = buildSystemPrompt(contextDocument);
+
+    // Create initial user message, acknowledging context if provided
+    const initialMessage = contextDocument
+      ? `Start the BRD creation process. I've attached a reference document "${contextDocument.fileName}" to provide context.`
+      : "Start the BRD creation process.";
+
     const response = await anthropic.messages.create({
       model: "claude-sonnet-4-5-20250929",
       max_tokens: 8192,
-      system: SYSTEM_PROMPT,
+      system: systemPrompt,
       messages:
         apiMessages.length === 0
-          ? [{ role: "user", content: "Start the BRD creation process." }]
+          ? [{ role: "user", content: initialMessage }]
           : apiMessages,
     });
 

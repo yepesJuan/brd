@@ -2,8 +2,10 @@
 
 import { useState, useRef, useEffect, FormEvent } from 'react';
 import { useBRDGenerator, Message } from '@/hooks/useBRDGenerator';
+import { useContextDocument } from '@/hooks/useContextDocument';
 import { Button } from '@/components/ui/Button';
 import { BRDDocumentPreview } from './BRDDocumentPreview';
+import { ContextDocumentUpload } from './ContextDocumentUpload';
 
 interface BRDGeneratorProps {
   onSubmitForApproval?: (document: string, title: string) => Promise<void>;
@@ -18,16 +20,36 @@ export function BRDGenerator({ onSubmitForApproval }: BRDGeneratorProps) {
     error,
     documentReady,
     generatedDocument,
+    contextDocument: activeContextDocument,
     sendMessage,
     resetChat,
     startNewBRD,
   } = useBRDGenerator();
+
+  const {
+    document: pendingDocument,
+    status: parseStatus,
+    error: parseError,
+    parseFile,
+    clearDocument,
+  } = useContextDocument();
 
   const [input, setInput] = useState('');
   const [showPreview, setShowPreview] = useState(false);
   const [mobileTab, setMobileTab] = useState<MobileTab>('chat');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleStartNewBRD = async () => {
+    const contextDoc = pendingDocument
+      ? { fileName: pendingDocument.info.fileName, content: pendingDocument.content }
+      : undefined;
+    await startNewBRD(contextDoc);
+    // Clear the pending document after starting (it's now stored in the BRD generator state)
+    if (pendingDocument) {
+      clearDocument();
+    }
+  };
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
@@ -85,8 +107,25 @@ export function BRDGenerator({ onSubmitForApproval }: BRDGeneratorProps) {
             about your project. When we're done, I'll generate a formatted document
             ready for approval.
           </p>
-          <Button onClick={startNewBRD} loading={isLoading} size="lg">
-            Start New BRD
+
+          {/* Context Document Upload */}
+          <div className="mb-6 text-left">
+            <ContextDocumentUpload
+              document={pendingDocument}
+              status={parseStatus}
+              error={parseError}
+              onFileSelect={parseFile}
+              onClear={clearDocument}
+            />
+          </div>
+
+          <Button
+            onClick={handleStartNewBRD}
+            loading={isLoading || parseStatus === 'parsing'}
+            size="lg"
+            disabled={parseStatus === 'parsing'}
+          >
+            {pendingDocument ? 'Start BRD with Context' : 'Start New BRD'}
           </Button>
         </div>
       </div>
@@ -176,7 +215,17 @@ export function BRDGenerator({ onSubmitForApproval }: BRDGeneratorProps) {
     <div className="flex flex-col h-[calc(100vh-12rem)]">
       {/* Header with actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-        <h2 className="text-lg font-semibold text-gray-900">BRD Generator</h2>
+        <div className="flex items-center gap-3">
+          <h2 className="text-lg font-semibold text-gray-900">BRD Generator</h2>
+          {activeContextDocument && (
+            <span className="inline-flex items-center gap-1 px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-xs">
+              <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+              </svg>
+              {activeContextDocument.fileName}
+            </span>
+          )}
+        </div>
         <div className="flex items-center gap-2">
           {documentReady && (
             <Button variant="primary" size="sm" onClick={() => setShowPreview(true)}>

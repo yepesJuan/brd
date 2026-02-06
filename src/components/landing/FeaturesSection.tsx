@@ -63,7 +63,7 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section className="bg-gray-50 py-16 sm:py-24">
+    <section className="bg-gray-50 py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -75,7 +75,7 @@ export function FeaturesSection() {
           </p>
         </div>
 
-        <div className="mx-auto mt-16 grid max-w-5xl gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto mt-10 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature) => (
             <div
               key={feature.title}

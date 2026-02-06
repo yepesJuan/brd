@@ -9,15 +9,21 @@ export interface Message {
   timestamp: Date;
 }
 
+export interface ContextDocumentInput {
+  fileName: string;
+  content: string;
+}
+
 interface UseBRDGeneratorReturn {
   messages: Message[];
   isLoading: boolean;
   error: string | null;
   documentReady: boolean;
   generatedDocument: string | null;
+  contextDocument: ContextDocumentInput | null;
   sendMessage: (content: string) => Promise<void>;
   resetChat: () => void;
-  startNewBRD: () => Promise<void>;
+  startNewBRD: (contextDocument?: ContextDocumentInput) => Promise<void>;
 }
 
 function generateId(): string {
@@ -30,6 +36,7 @@ export function useBRDGenerator(): UseBRDGeneratorReturn {
   const [error, setError] = useState<string | null>(null);
   const [documentReady, setDocumentReady] = useState(false);
   const [generatedDocument, setGeneratedDocument] = useState<string | null>(null);
+  const [contextDocument, setContextDocument] = useState<ContextDocumentInput | null>(null);
 
   const sendMessage = useCallback(async (content: string) => {
     if (!content.trim() || isLoading) return;
@@ -59,6 +66,7 @@ export function useBRDGenerator(): UseBRDGeneratorReturn {
             role: m.role,
             content: m.content,
           })),
+          contextDocument: contextDocument || undefined,
         }),
       });
 
@@ -88,14 +96,15 @@ export function useBRDGenerator(): UseBRDGeneratorReturn {
     } finally {
       setIsLoading(false);
     }
-  }, [messages, isLoading]);
+  }, [messages, isLoading, contextDocument]);
 
-  const startNewBRD = useCallback(async () => {
+  const startNewBRD = useCallback(async (contextDoc?: ContextDocumentInput) => {
     setError(null);
     setIsLoading(true);
     setMessages([]);
     setDocumentReady(false);
     setGeneratedDocument(null);
+    setContextDocument(contextDoc || null);
 
     try {
       const response = await fetch('/api/brd-generator', {
@@ -106,6 +115,7 @@ export function useBRDGenerator(): UseBRDGeneratorReturn {
         body: JSON.stringify({
           messages: [],
           isInitial: true,
+          contextDocument: contextDoc || undefined,
         }),
       });
 
@@ -137,6 +147,7 @@ export function useBRDGenerator(): UseBRDGeneratorReturn {
     setError(null);
     setDocumentReady(false);
     setGeneratedDocument(null);
+    setContextDocument(null);
   }, []);
 
   return {
@@ -145,6 +156,7 @@ export function useBRDGenerator(): UseBRDGeneratorReturn {
     error,
     documentReady,
     generatedDocument,
+    contextDocument,
     sendMessage,
     resetChat,
     startNewBRD,

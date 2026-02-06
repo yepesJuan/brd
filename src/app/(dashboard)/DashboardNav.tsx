@@ -33,7 +33,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
           <div className="flex h-16 items-center justify-between">
             {/* Logo & Nav */}
             <div className="flex items-center gap-8">
-              <Link href="/requirements" className="text-xl font-bold text-gray-900">
+              <Link href="/" className="text-xl font-bold text-gray-900">
                 Greenlight
               </Link>
               <div className="hidden sm:flex items-center gap-4">
@@ -136,6 +136,23 @@ export function DashboardNav({ user }: DashboardNavProps) {
               {/* Nav links */}
               <nav className="flex-1 px-4 py-4">
                 <ul className="space-y-2">
+                  <li>
+                    <Link
+                      href="/"
+                      className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      onClick={closeMobileMenu}
+                    >
+                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                        />
+                      </svg>
+                      Home
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       href="/requirements"
