@@ -43,7 +43,15 @@ export function DashboardNav({ user }: DashboardNavProps) {
                 >
                   Requirements
                 </Link>
-                {user.role === 'BUSINESS' && (
+                {(user.role === 'BUSINESS' || user.role === 'PRODUCT') && (
+                  <Link
+                    href="/requirements/generate"
+                    className="text-sm font-medium text-gray-600 hover:text-gray-900"
+                  >
+                    Generate with AI
+                  </Link>
+                )}
+                {(user.role === 'BUSINESS' || user.role === 'PRODUCT') && (
                   <Link
                     href="/requirements/new"
                     className="text-sm font-medium text-gray-600 hover:text-gray-900"
@@ -170,43 +178,43 @@ export function DashboardNav({ user }: DashboardNavProps) {
                       Requirements
                     </Link>
                   </li>
-                  {user.role === 'BUSINESS' && (
-                    <>
-                      <li>
-                        <Link
-                          href="/requirements/new"
-                          className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                          onClick={closeMobileMenu}
-                        >
-                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M12 4v16m8-8H4"
-                            />
-                          </svg>
-                          Upload New
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/requirements/generate"
-                          className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                          onClick={closeMobileMenu}
-                        >
-                          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M13 10V3L4 14h7v7l9-11h-7z"
-                            />
-                          </svg>
-                          Generate with AI
-                        </Link>
-                      </li>
-                    </>
+                  {(user.role === 'BUSINESS' || user.role === 'PRODUCT') && (
+                    <li>
+                      <Link
+                        href="/requirements/generate"
+                        className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        onClick={closeMobileMenu}
+                      >
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                          />
+                        </svg>
+                        Generate with AI
+                      </Link>
+                    </li>
+                  )}
+                  {(user.role === 'BUSINESS' || user.role === 'PRODUCT') && (
+                    <li>
+                      <Link
+                        href="/requirements/new"
+                        className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                        onClick={closeMobileMenu}
+                      >
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 4v16m8-8H4"
+                          />
+                        </svg>
+                        Upload New
+                      </Link>
+                    </li>
                   )}
                 </ul>
               </nav>

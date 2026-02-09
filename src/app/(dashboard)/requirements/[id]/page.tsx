@@ -5,6 +5,7 @@ import { StatusBadge, RoleBadge } from '@/components/ui/Badge';
 import { Avatar } from '@/components/ui/Avatar';
 import { SignOffPanel } from '@/components/sign-offs/SignOffPanel';
 import { DownloadButton } from '@/components/requirements/DownloadButton';
+import { EpicLinkEditor } from '@/components/requirements/EpicLinkEditor';
 import { formatDateTime } from '@/lib/utils';
 import type { Status, User } from '@/types';
 
@@ -120,21 +121,14 @@ export default async function RequirementDetailPage({ params }: PageProps) {
               </div>
               <DownloadButton filePath={requirement.file_path} fileName={requirement.file_name} />
             </div>
-
-            {requirement.epic_link && (
-              <div className="mt-4">
-                <h3 className="text-sm font-medium text-gray-700 mb-1">Epic Link</h3>
-                <a
-                  href={requirement.epic_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-700 text-sm"
-                >
-                  {requirement.epic_link}
-                </a>
-              </div>
-            )}
           </div>
+
+          {/* Epic Link */}
+          <EpicLinkEditor
+            requirementId={requirement.id}
+            currentEpicLink={requirement.epic_link}
+            canEdit={currentUser.role === 'BUSINESS' || currentUser.role === 'PRODUCT'}
+          />
         </div>
 
         {/* Sign-off panel */}

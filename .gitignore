@@ -40,6 +40,6 @@ coverage
 
 .claude/
 
-*.md
+spec.md
 
 .mpc.json

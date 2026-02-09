@@ -13,7 +13,8 @@ export default async function RequirementsPage() {
     .eq('id', authUser?.id)
     .single();
 
-  const isBusinessUser = user?.role === 'BUSINESS';
+  const canGenerate = user?.role === 'BUSINESS' || user?.role === 'PRODUCT';
+  const canUpload = user?.role === 'BUSINESS' || user?.role === 'PRODUCT';
   const currentUserId = authUser?.id;
 
   return (
@@ -25,19 +26,23 @@ export default async function RequirementsPage() {
             View and sign off on business requirements documents
           </p>
         </div>
-        {isBusinessUser && (
+        {(canGenerate || canUpload) && (
           <div className="flex flex-wrap items-center gap-2">
-            <Link href="/requirements/generate">
-              <Button variant="outline">
-                <svg className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-                Generate with AI
-              </Button>
-            </Link>
-            <Link href="/requirements/new">
-              <Button>Upload Document</Button>
-            </Link>
+            {canGenerate && (
+              <Link href="/requirements/generate">
+                <Button variant="outline">
+                  <svg className="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  Generate with AI
+                </Button>
+              </Link>
+            )}
+            {canUpload && (
+              <Link href="/requirements/new">
+                <Button>Upload Document</Button>
+              </Link>
+            )}
           </div>
         )}
       </div>

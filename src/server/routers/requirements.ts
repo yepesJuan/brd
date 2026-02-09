@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { TRPCError } from '@trpc/server';
-import { router, protectedProcedure, businessProcedure } from '../trpc';
+import { router, protectedProcedure, contentCreatorProcedure } from '../trpc';
 import { createRequirementSchema } from './schema';
 
 export const requirementsRouter = router({
@@ -61,8 +61,8 @@ export const requirementsRouter = router({
       return data;
     }),
 
-  // Create requirement (BUSINESS only)
-  create: businessProcedure
+  // Create requirement (BUSINESS and PRODUCT can create)
+  create: contentCreatorProcedure
     .input(createRequirementSchema)
     .mutation(async ({ ctx, input }) => {
       const { data, error } = await ctx.supabase
@@ -106,8 +106,8 @@ export const requirementsRouter = router({
       return data;
     }),
 
-  // Upload file to storage
-  getUploadUrl: businessProcedure
+  // Upload file to storage (BUSINESS and PRODUCT can upload)
+  getUploadUrl: contentCreatorProcedure
     .input(z.object({ fileName: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const filePath = `${ctx.user.id}/${Date.now()}-${input.fileName}`;
@@ -124,5 +124,38 @@ export const requirementsRouter = router({
       }
 
       return { ...data, filePath };
+    }),
+
+  // Update epic link (BUSINESS and PRODUCT can update)
+  updateEpicLink: contentCreatorProcedure
+    .input(z.object({
+      id: z.string().uuid(),
+      epicLink: z.string().url().optional().or(z.literal('')),
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const { data, error } = await ctx.supabase
+        .from('requirements')
+        .update({
+          epic_link: input.epicLink || null,
+          updated_by: ctx.user.id,
+        })
+        .eq('id', input.id)
+        .select()
+        .single();
+
+      if (error) {
+        if (error.code === 'PGRST116') {
+          throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'Requirement not found',
+          });
+        }
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: error.message,
+        });
+      }
+
+      return data;
     }),
 });

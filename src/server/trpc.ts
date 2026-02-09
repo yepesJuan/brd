@@ -57,3 +57,14 @@ export const businessProcedure = protectedProcedure.use(({ ctx, next }) => {
   }
   return next({ ctx });
 });
+
+// Content creator procedure - allows BUSINESS and PRODUCT to create requirements
+export const contentCreatorProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.user.role !== 'BUSINESS' && ctx.user.role !== 'PRODUCT') {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'Only Business Stakeholders and Product Owners can perform this action',
+    });
+  }
+  return next({ ctx });
+});
